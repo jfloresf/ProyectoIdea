@@ -5,20 +5,25 @@
         <div class="column">
           <b-field label="Seleccionar Tema">
             <b-select v-model="theme" placeholder="Tema">
-              <option :value="1">Tema 1</option>
-              <option :value="2">Tema 2</option>
+              <option :value="1">Blockchain</option>
+              <option :value="2">Data Mining</option>
+              <option :value="3">Mejora de Procesos</option>
+              <option :value="4">Desarrollo Web</option>
+              <option :value="5">Desarrollo Movil</option>
+              <option :value="6">Data Science</option>
+              <option :value="7">Machine Learning</option>
             </b-select>
           </b-field>
           <b-button @click="generateIdea()" type="is-primary"
-            >Generar ideas</b-button
-          >
+          >Generar ideas
+          </b-button>
         </div>
       </div>
 
       <div class="columns">
         <div class="column">
           <b-field label="Idea">
-            <b-input v-model="idea" :disabled="true" type="textarea"></b-input>
+            <b-input v-model="idea" :disabled="false" type="textarea"></b-input>
           </b-field>
           <div class="buttons">
             <b-button @click="insertIdea()" type="is-primary">Guardar</b-button>
@@ -31,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Vue } from "vue-property-decorator";
+import {Component, Vue} from "vue-property-decorator";
 
 @Component({
   components: {}
@@ -49,16 +54,19 @@ export default class Home extends Vue {
   }
 
   generateIdea() {
-    const request = { theme: this.theme };
+    const request = {theme: this.theme};
     Vue.axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-    Vue.axios
-      .post("http://127.0.0.1:8000/idea/generate-idea", request, {})
-      .then(response => {
-        console.log(response);
-      })
-      .catch(error => {
-        console.error("There was an error!", error);
-      });
+    Vue.axios({
+      method: "post",
+      url: "http://192.168.0.104:8000/idea/generate-idea",
+      data: request
+    })
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => {
+          console.error("There was an error!", error);
+        });
   }
 
   deleteIdea() {
