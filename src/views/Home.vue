@@ -15,7 +15,7 @@
             </b-select>
           </b-field>
           <b-button @click="generateIdea()" type="is-primary"
-          >Generar ideas
+            >Generar ideas
           </b-button>
         </div>
       </div>
@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts">
-import {Component, Vue} from "vue-property-decorator";
+import { Component, Vue } from "vue-property-decorator";
 
 @Component({
   components: {}
@@ -51,26 +51,41 @@ export default class Home extends Vue {
     }
     localStorage.setItem(this.idea, this.idea);
     this.idea = "";
+    this.$buefy.notification.open({
+      message: "Se agrego correctamente.",
+      type: "is-success",
+      duration: 2000,
+      position: "is-bottom-right"
+    });
   }
 
   generateIdea() {
-    const request = {theme: this.theme};
+    const request = { theme: this.theme };
     Vue.axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
     Vue.axios({
       method: "post",
       url: "http://192.168.0.104:8000/idea/generate-idea",
       data: request
     })
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => {
-          console.error("There was an error!", error);
-        });
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.error("There was an error!", error);
+      });
   }
 
   deleteIdea() {
+    if (this.idea === "") {
+      return;
+    }
     this.idea = "";
+    this.$buefy.notification.open({
+      message: "Se elimino correctamente.",
+      type: "is-danger",
+      duration: 2000,
+      position: "is-bottom-right"
+    });
   }
 }
 </script>
