@@ -23,7 +23,7 @@
       <div class="columns">
         <div class="column">
           <b-field label="Idea">
-            <b-input v-model="idea" :disabled="false" type="textarea"></b-input>
+            <b-input v-model="idea" :disabled="true" type="textarea"></b-input>
           </b-field>
           <div class="buttons">
             <b-button @click="insertIdea()" type="is-primary">Guardar</b-button>
@@ -61,14 +61,15 @@ export default class Home extends Vue {
 
   generateIdea() {
     const request = { theme: this.theme };
-    Vue.axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+    Vue.axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
+    Vue.axios.defaults.xsrfCookieName = "csrftoken";
     Vue.axios({
       method: "post",
-      url: "http://192.168.0.104:8000/idea/generate-idea",
+      url: "http://127.0.0.1:8000/idea/generate-idea",
       data: request
     })
       .then(response => {
-        console.log(response);
+        this.idea = response.data.idea;
       })
       .catch(error => {
         console.error("There was an error!", error);
